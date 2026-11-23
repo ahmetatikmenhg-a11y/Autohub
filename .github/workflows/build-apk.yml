@@ -21,7 +21,9 @@ jobs:
           gradle-version: '8.7'
       - name: APK Derle
         working-directory: AutoHub-AndroidAuto
-        run: gradle assembleDebug
+        run: |
+          printf "android.useAndroidX=true\nandroid.suppressUnsupportedCompileSdk=35\n" > gradle.properties
+          gradle assembleDebug
       - name: APK Paketle
         uses: actions/upload-artifact@v4
         with:
