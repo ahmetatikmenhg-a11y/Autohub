@@ -1,0 +1,29 @@
+name: AutoHub APK Derleyici
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ZIP Dosyasını Aç
+        run: unzip -o "*.zip"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+      - name: APK Derle
+        working-directory: AutoHub-AndroidAuto
+        run: gradle assembleDebug
+      - name: APK Paketle
+        uses: actions/upload-artifact@v4
+        with:
+          name: AutoHub-APK
+          path: AutoHub-AndroidAuto/app/build/outputs/apk/debug/app-debug.apk
